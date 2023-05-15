@@ -72,8 +72,6 @@ public class pmove : AttributesSync
     }
     public void Collide(int otherindex)
     {
-        rb.velocity = Vector2.zero;
-
         rb.AddForce((gm.players[otherindex].transform.position - transform.position).normalized*10*pushMultiplier*-1 , ForceMode2D.Impulse);
     }
 
