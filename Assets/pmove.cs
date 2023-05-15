@@ -25,9 +25,11 @@ public class pmove : AttributesSync
     private Vector2 spawnpoint;
 
     private Rigidbody2D rb;
+    private SpriteRenderer sr;
 
     void Start()
     {
+        sr = GetComponent<SpriteRenderer>();
         gm = GameManager.Instance;
         rb = GetComponent<Rigidbody2D>();
         avatar = GetComponent<Alteruna.Avatar>();
@@ -65,10 +67,27 @@ public class pmove : AttributesSync
     }
     private void SetColor()
     {
-        if (avatar.Possessor.Index == 0)
-            avatar.GetComponentInChildren<SpriteRenderer>().color = Color.blue;
-        else
-            avatar.GetComponentInChildren<SpriteRenderer>().color = Color.red;
+        switch (avatar.Possessor.Index)
+        {
+            case 0:
+                sr.color = Color.blue;
+                break;
+
+            case 1:
+                sr.color = Color.red;
+                break;
+
+            case 2:
+                sr.color = Color.yellow;
+                break;
+
+            case 3:
+                sr.color = Color.green;
+                break;
+
+            default:
+                break;
+        }
     }
     public void Collide(int otherindex)
     {
