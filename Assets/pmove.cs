@@ -29,7 +29,7 @@ public class pmove : AttributesSync
 
     void Start()
     {
-        sr = GetComponent<SpriteRenderer>();
+        sr = GetComponentInChildren<SpriteRenderer>();
         gm = GameManager.Instance;
         rb = GetComponent<Rigidbody2D>();
         avatar = GetComponent<Alteruna.Avatar>();
