@@ -15,6 +15,8 @@ public class pmove : AttributesSync
 
     GameManager gm;
 
+    private bool canIncrease = true;
+
     public float speed = 1;
     private float moveX, moveY;
 
@@ -91,11 +93,26 @@ public class pmove : AttributesSync
     }
     public void Collide(int otherindex)
     {
-        rb.AddForce((gm.players[otherindex].transform.position - transform.position).normalized*10*pushMultiplier*-1 , ForceMode2D.Impulse);
+        rb.velocity = Vector2.zero;
+        rb.AddForce((gm.players[otherindex].transform.position - transform.position).normalized*5*pushMultiplier*-1 , ForceMode2D.Impulse);
+        IncreaseSpin();
+        Debug.Log(pushMultiplier);
     }
 
 
+    void IncreaseSpin()
+    {
+        if (!canIncrease)
+            return;
 
+        pushMultiplier += .3f;
+        canIncrease = false;
+        Invoke(nameof(SpeedTimer),.2f);
+    }
+    void SpeedTimer()
+    {
+        canIncrease = true;
+    }
 
     private IEnumerator LerpAutomove(Vector2 startValue, Vector2 endVal, float duration)
     {

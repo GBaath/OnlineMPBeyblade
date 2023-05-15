@@ -20,7 +20,7 @@ public class PCollisionCheck : AttributesSync
         {
             InvokeRemoteMethod(nameof(PlayerCollision), pmove.avatar.Possessor.Index, collision.transform.parent.GetComponent<pmove>().avatar.Possessor.Index);
 
-            InvokeRemoteMethod(nameof(PlayerCollision), collision.transform.root.GetComponent<pmove>().avatar.Possessor.Index, pmove.avatar.Possessor.Index);
+            //InvokeRemoteMethod(nameof(PlayerCollision), collision.transform.root.GetComponent<pmove>().avatar.Possessor.Index, pmove.avatar.Possessor.Index);
 
         }
     }
