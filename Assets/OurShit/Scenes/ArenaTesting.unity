@@ -253,7 +253,19 @@ MonoBehaviour:
       m_Calls: []
   RoomJoined:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1240701871}
+        m_TargetAssemblyTypeName: HideRoomMenu, Assembly-CSharp
+        m_MethodName: ToggleRoomPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   RoomLeft:
     m_PersistentCalls:
       m_Calls: []
@@ -616,6 +628,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &990792751 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8763101913419821391, guid: 5a577542a281e0a448dc3b383023e1f2, type: 3}
+  m_PrefabInstance: {fileID: 1773859011}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1240701865 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8763101913705298807, guid: 5a577542a281e0a448dc3b383023e1f2, type: 3}
+  m_PrefabInstance: {fileID: 1773859011}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1240701871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240701865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a68c30976da6f3e4bbc465f10e9bbaf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomPanel: {fileID: 990792751}
 --- !u!1 &1571495212
 GameObject:
   m_ObjectHideFlags: 0
@@ -954,5 +989,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 10.022959, y: 6.9232044}
+  m_Size: {x: 9.595516, y: 6.683858}
   m_EdgeRadius: 0
