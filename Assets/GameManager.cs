@@ -13,4 +13,20 @@ public class GameManager : AttributesSync
     {
         Instance = this;
     }
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+
+        }
+    }
+
+    void MakeList()
+    {
+        FindObjectOfType<pmove>();
+
+    }
+
 }
