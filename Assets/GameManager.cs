@@ -7,17 +7,10 @@ public class GameManager : AttributesSync
 {
     public static GameManager Instance { get; private set; }
 
-    [SynchronizableField]
-    public Vector2 player1Pos;
-    [SynchronizableField]
-    public Vector2 player2Pos;
-    [SynchronizableField]
-    public Vector2 player1Force;
-    [SynchronizableField]
-    public Vector2 player2Force;
+    public List<pmove> players = new List<pmove>();
 
-    [SynchronizableField]
-    Vector2 pushForce;
-
-
+    private void Start()
+    {
+        Instance = this;
+    }
 }

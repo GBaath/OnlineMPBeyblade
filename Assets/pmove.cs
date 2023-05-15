@@ -11,12 +11,14 @@ public class pmove : AttributesSync
     const string VERTICAL = "Vertical";
 
 
-    private Alteruna.Avatar avatar;
+    public Alteruna.Avatar avatar;
 
-    GameManager gm = GameManager.Instance;
+    GameManager gm;
 
     public float speed = 1;
     private float moveX, moveY;
+
+    public float pushMultiplier =1;
     
     private Vector2 move;
     private Vector2 automove;
@@ -26,11 +28,14 @@ public class pmove : AttributesSync
 
     void Start()
     {
+        gm = GameManager.Instance;
         rb = GetComponent<Rigidbody2D>();
         avatar = GetComponent<Alteruna.Avatar>();
         spawnpoint = transform.position;
 
         SetColor();
+
+        gm.players[avatar.Possessor.Index] = this;
        
     }
 
@@ -45,7 +50,6 @@ public class pmove : AttributesSync
 
         move = moveX * Vector3.right + moveY * Vector3.up;
 
-        SetManagerRefs(avatar.Possessor.Index);
 
 
     }
@@ -66,41 +70,11 @@ public class pmove : AttributesSync
         else
             avatar.GetComponentInChildren<SpriteRenderer>().color = Color.red;
     }
-    private void SetManagerRefs(int index)
+    public void Collide(int otherindex)
     {
-       
+        rb.velocity = Vector2.zero;
 
-        switch (index)
-        {
-            case 0:
-                gm.player1Pos = transform.position;
-                gm.player1Force = rb.velocity;
-                break;
-
-            case 1:
-                gm.player2Pos = transform.position;
-                gm.player2Force = rb.velocity;
-                break;
-
-            default:
-                break;
-        }
-    }
-    public void Collide()
-    {
-        switch (avatar.Possessor.Index)
-        {
-            case 0:
-
-                break;
-
-            case 1:
-                
-                break;
-
-            default:
-                break;
-        }
+        rb.AddForce((gm.players[otherindex].transform.position - transform.position).normalized*10*pushMultiplier*-1 , ForceMode2D.Impulse);
     }
 
 
