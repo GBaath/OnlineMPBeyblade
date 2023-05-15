@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Alteruna;
+using Unity.VisualScripting;
 
 public class pmove : MonoBehaviour
 {
@@ -10,6 +11,12 @@ public class pmove : MonoBehaviour
 
 
     private Alteruna.Avatar avatar;
+
+
+    private void Start()
+    {
+        avatar = GetComponent<Alteruna.Avatar>();
+    }
 
     void Update()
     {
