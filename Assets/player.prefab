@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1082626753758488165}
   - component: {fileID: 1082626753758488162}
-  - component: {fileID: 1082626753758488164}
   - component: {fileID: 3616538473086299931}
   - component: {fileID: 3596534868010044977}
+  - component: {fileID: 1285011209195896602}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -58,18 +58,6 @@ MonoBehaviour:
   OnUnpossessed:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1082626753758488164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1082626753758488163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4fdcbf2ccf2ec846bc34bce3c3b9f96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &3616538473086299931
 Rigidbody2D:
   serializedVersion: 4
@@ -143,6 +131,20 @@ MonoBehaviour:
     RealtimeString: Realtime
   UseGlobalPosition: 0
   SyncInFixedUpdate: 1
+--- !u!114 &1285011209195896602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082626753758488163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4fdcbf2ccf2ec846bc34bce3c3b9f96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  runParticles: {fileID: 0}
 --- !u!1 &4031624828146156638
 GameObject:
   m_ObjectHideFlags: 0
