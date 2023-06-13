@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Alteruna;
-using Unity.VisualScripting;
-using System;
+using UnityEngine.UIElements;
 
 public class pmove : AttributesSync
 {
@@ -13,6 +12,8 @@ public class pmove : AttributesSync
 
     public Alteruna.Avatar avatar;
 
+    public GameObject ClashParticles;
+
     GameManager gm;
 
     private bool canIncrease = true;
@@ -20,27 +21,36 @@ public class pmove : AttributesSync
     public float speed = 1;
     private float moveX, moveY;
 
-    public float pushMultiplier =1;
-    
+    public float pushMultiplier = 1;
+
     private Vector2 move;
     private Vector2 automove;
     private Vector2 spawnpoint;
 
-    private Rigidbody2D rb;
-    private SpriteRenderer sr;
+    private Animator anim;
+    private Rigidbody2D rBody;
+    private SpriteRenderer spriteRend;
+    public Spinning spinnRef;
+    public Spinning spinnSubRef;
+    private Collider2D collision;
+
+    private bool isDead = false;
 
     void Start()
     {
-        sr = GetComponentInChildren<SpriteRenderer>();
-        gm = GameManager.Instance;
-        rb = GetComponent<Rigidbody2D>();
         avatar = GetComponent<Alteruna.Avatar>();
+        spriteRend = GetComponentInChildren<SpriteRenderer>();
+        rBody = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        collision = GetComponentInChildren<Collider2D>();
+
+        gm = GameManager.Instance;
         spawnpoint = transform.position;
+
+        gm.players[avatar.Possessor.Index] = this;
 
         SetColor();
 
-        gm.players[avatar.Possessor.Index] = this;
-       
     }
 
     void Update()
@@ -48,56 +58,89 @@ public class pmove : AttributesSync
         if (!avatar.IsMe)
             return;
 
+        if (!isDead)
+        {
+            moveY = Input.GetAxis(VERTICAL);
+            moveX = Input.GetAxis(HORIZONTAL);
 
-        moveY = Input.GetAxis(VERTICAL);
-        moveX = Input.GetAxis(HORIZONTAL);
+            move = moveX * Vector3.right + moveY * Vector3.up;
 
-        move = moveX * Vector3.right + moveY * Vector3.up;
+            if (move == Vector2.zero)
+            {
+                spinnRef.moveSpinnModifier = 1;
+                spinnSubRef.moveSpinnModifier = 1;
+            }
+            else
+            {
+                spinnRef.moveSpinnModifier = 1.2f;
+                spinnSubRef.moveSpinnModifier = 1.2f;
+            }
+        }
+        else
+        {
+            spinnRef.moveSpinnModifier = 0f;
+            spinnSubRef.moveSpinnModifier = 0f;
+        }
 
-
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            GameManager.Instance.RestartGame();
+        }
 
     }
+
     private void FixedUpdate()
     {
-        rb.AddForce(move * speed + automove);
+        if (!avatar.IsMe)
+            return;
+
+        if (!isDead)
+            rBody.AddForce(move * speed + automove);
     }
 
-    public void Respawn()
-    {
-        transform.position = spawnpoint;
-        rb.velocity = Vector3.zero;
-    }
+
+
     private void SetColor()
     {
         switch (avatar.Possessor.Index)
         {
             case 0:
-                sr.color = Color.blue;
+                spriteRend.color = Color.blue;
                 break;
 
             case 1:
-                sr.color = Color.red;
+                spriteRend.color = Color.red;
                 break;
 
             case 2:
-                sr.color = Color.yellow;
+                spriteRend.color = Color.yellow;
                 break;
 
             case 3:
-                sr.color = Color.green;
+                spriteRend.color = Color.green;
                 break;
 
             default:
                 break;
         }
     }
-    public void Collide(int otherindex)
+    public void Collide(Vector3 otherObject, float additionalForce)
     {
-        rb.velocity = Vector2.zero;
-        rb.AddForce((gm.players[otherindex].transform.position - transform.position).normalized*5*pushMultiplier*-1 , ForceMode2D.Impulse);
+        rBody.velocity = Vector2.zero;
+        Vector2 CollisionDir = (otherObject - transform.position).normalized;
+
+        rBody.AddForce(CollisionDir * additionalForce * pushMultiplier * -1, ForceMode2D.Impulse);
         IncreaseSpin();
-        Debug.Log(pushMultiplier);
+
+        Instantiate(ClashParticles, (otherObject + transform.position) / 2, Quaternion.FromToRotation(Vector2.up, CollisionDir));
+
     }
+    //public void Collide(Vector3 otherObject)
+    //{
+    //    rBody.velocity = Vector2.zero;
+    //    rBody.AddForce((otherObject - transform.position).normalized * 3 * pushMultiplier * -1, ForceMode2D.Impulse);
+    //    IncreaseSpin();
+    //}
 
 
     void IncreaseSpin()
@@ -106,12 +149,54 @@ public class pmove : AttributesSync
             return;
 
         pushMultiplier += .3f;
+        spinnRef.spinnSpeed += 1;
         canIncrease = false;
-        Invoke(nameof(SpeedTimer),.2f);
+        Invoke(nameof(SpeedTimer), .2f);
     }
     void SpeedTimer()
     {
         canIncrease = true;
+    }
+    public void Death()
+    {
+        isDead = true;
+        anim.enabled = true;
+        anim.SetBool("IsDead?", true);
+
+        collision.enabled = false;
+        rBody.drag = 3;
+        
+        transform.rotation = Quaternion.Euler(0, 0, Random.Range(0,360));
+
+        pushMultiplier = 1;
+        spinnRef.spinnSpeed = 10;     
+    }
+
+
+    [SynchronizableMethod]
+    public void Restart()
+    {
+        anim.SetBool("IsDead?", false);
+        Invoke(nameof(DisableAnimator), 0.1f);
+        isDead = false;
+
+        rBody.velocity = Vector2.zero;
+        collision.enabled = true;
+        rBody.drag = 1;
+
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        pushMultiplier = 1;
+        spinnRef.spinnSpeed = 10;
+
+        transform.position = spawnpoint;
+
+        GameManager.Instance.EnableStartPanel();
+    }
+
+    public void DisableAnimator()
+    {
+        anim.enabled = false;
     }
 
     private IEnumerator LerpAutomove(Vector2 startValue, Vector2 endVal, float duration)

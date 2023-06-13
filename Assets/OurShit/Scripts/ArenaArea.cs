@@ -14,6 +14,6 @@ public class ArenaArea : MonoBehaviour
         if (!playerRef)
             return;
 
-        playerRef.Respawn();
+        playerRef.Death();
     }
 }

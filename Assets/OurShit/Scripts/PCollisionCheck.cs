@@ -18,17 +18,14 @@ public class PCollisionCheck : AttributesSync
     {
         if (collision.CompareTag("Player"))
         {
-            InvokeRemoteMethod(nameof(PlayerCollision), pmove.avatar.Possessor.Index, collision.transform.parent.GetComponent<pmove>().avatar.Possessor.Index);
-
-            //InvokeRemoteMethod(nameof(PlayerCollision), collision.transform.root.GetComponent<pmove>().avatar.Possessor.Index, pmove.avatar.Possessor.Index);
+            pmove.Collide(collision.transform.position, 1);
+            StartCoroutine(GameManager.Instance.CamShake(0.2f, 0.1f));
 
         }
-    }
-
-
-    [SynchronizableMethod]
-    public void PlayerCollision(int indexOther)
-    {
-        pmove.Collide(indexOther);
+        else if (collision.CompareTag("Terrain"))
+        {
+            pmove.Collide(collision.transform.position, 3);
+            StartCoroutine(GameManager.Instance.CamShake(0.2f, 0.2f ));
+        }
     }
 }
